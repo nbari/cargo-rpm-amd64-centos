@@ -1,0 +1,1 @@
+# cargo-rpm-amd64-centos

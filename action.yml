@@ -11,6 +11,6 @@ inputs:
     default: 'cargo rpm build -v'
 runs:
   using: 'docker'
-  image: 'docker://nbari/cargo-rpm-amd64-centos:1.0'
+  image: 'docker://nbari/cargo-rpm-amd64-centos:latest'
   args:
     - ${{ inputs.cmd }}

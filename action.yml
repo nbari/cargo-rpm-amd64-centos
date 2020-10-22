@@ -1,0 +1,16 @@
+# action.yml
+name: 'Rust Cargo Rpm Package Build (amd64, centos8)'
+description: 'Builds a statically linked rpm package, amd64, centos 8'
+branding:
+  icon: 'package'
+  color: 'orange'
+inputs:
+  cmd:
+    description: 'build command'
+    required: true
+    default: 'cargo rpm build -v'
+runs:
+  using: 'docker'
+  image: 'docker://nbari/cargo-rpm-amd64-centos:1.0'
+  args:
+    - ${{ inputs.cmd }}

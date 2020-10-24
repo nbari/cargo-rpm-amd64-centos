@@ -8,7 +8,7 @@ inputs:
   cmd:
     description: 'build command'
     required: true
-    default: 'cargo rpm build -v'
+    default: 'cargo rpm build'
 runs:
   using: 'docker'
   image: 'docker://nbari/cargo-rpm-amd64-centos:latest'

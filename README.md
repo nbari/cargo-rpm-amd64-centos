@@ -13,18 +13,26 @@ None, besides the `rpm` package that is built. The built `.rpm` will be located 
 ## Example Usage
 
 ```yaml
-name: RPM Static Build
+name: build
 
-on: [push]
+on:
+  push:
+    tags:
+    - '*'
+
+env:
+    CARGO_TERM_COLOR: always
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: Rust Cargo Rpm Package Build (amd64, centos8)
       id: rpm_build
-      uses: nbari/cargo-rpm-amd64-centos@1.0.2
+      uses: nbari/cargo-rpm-amd64-centos@1.0.1
+      with: # https://crates.io/crates/httpwsrep
+        cmd: cargo rpm build -o httpwsrep.rpm
 
     - name: Create Release
       id: create_release
@@ -41,13 +49,16 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Display structure of downloaded files
+      run: ls -R
+
     - name: Upload a Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ${{ steps.rpm_build.outputs.source_rpm_path }}
-        asset_name: ${{ steps.rpm_build.outputs.source_rpm_name }}
-        asset_content_type: ${{ steps.rpm_build.outputs.rpm_content_type }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: httpwsrep.rpm
+        asset_name: httpwsrep.rpm
+        asset_content_type: application/octet-stream
 ```
